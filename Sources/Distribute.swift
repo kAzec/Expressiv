@@ -12,8 +12,8 @@ public enum DistributionMode {
     case horizontally, vertically, leadingToTrailing
 }
 
-public func distribute(_ views: [LayoutProxy<UIView>], _ mode: DistributionMode, by spacing: CGFloat)
-    -> [NSLayoutConstraint] {
+public func distribute<Views : Sequence>(_ views: Views, _ mode: DistributionMode, by spacing: CGFloat)
+    -> [NSLayoutConstraint] where Views.Iterator.Element == LayoutProxy<UIView> {
     
         var iterator = views.makeIterator()
         
@@ -31,7 +31,6 @@ public func distribute(_ views: [LayoutProxy<UIView>], _ mode: DistributionMode,
             
             var formedConstraints = [NSLayoutConstraint]()
             while let nextView = iterator.next() {
-                
                 formedConstraints.append(combine(previousView, nextView))
                 previousView = nextView
             }

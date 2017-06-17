@@ -8,14 +8,13 @@
 
 import Foundation
 
-public struct LayoutEdgeProperty<T : AnyObject, Anchor : NSLayoutAnchor<T>> : LayoutProperty {
+public struct LayoutEdgeProperty<T, Anchor : NSLayoutAnchor<T>> : LayoutProperty {
     
     public var constant: CGFloat
     
     let context: LayoutContext
     
     let anchor: Anchor
-    
     
     @discardableResult
     public static func ==(lhs: LayoutEdgeProperty<T, Anchor>, rhs: LayoutEdgeProperty<T, Anchor>)

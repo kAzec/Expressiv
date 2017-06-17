@@ -23,9 +23,3 @@ public struct LayoutProxy<Target : Layoutable> {
         }
     }
 }
-
-func test(view: UIView, view2: UIView) {
-    layout(view, view2) { v1, v2 in
-        v1.left == v2.centerX + 10
-    }
-}

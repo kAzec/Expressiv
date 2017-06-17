@@ -28,22 +28,22 @@ public final class LayoutConstraintGroup {
         self.init(first: first, rest: rest)
     }
     
-    public func activateConstraints() {
+    public func activateAll() {
         NSLayoutConstraint.activate(constraints)
     }
     
-    public func deactivateConstraints() {
+    public func deactivateAll() {
         NSLayoutConstraint.deactivate(constraints)
     }
     
     public func replaceConstraints(_ newConstraints: [NSLayoutConstraint]) {
-        deactivateConstraints()
+        deactivateAll()
         constraints = newConstraints
-        activateConstraints()
+        activateAll()
     }
     
     public func deactivateAndRemoveConstraints() {
-        deactivateConstraints()
+        deactivateAll()
         constraints.removeAll()
     }
     
