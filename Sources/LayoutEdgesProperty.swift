@@ -6,82 +6,82 @@
 //  Copyright © 2017 kAzec. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
 
 public struct LayoutEdgesProperty : LayoutCompoundProperty {
+    public typealias CompoundConstraint = LayoutConstraintGroup
     
-    public var insets: UIEdgeInsets
+    let item: AnyObject
     
-    let context: LayoutContext
+    /// The insets value used to form the constraint.
+    public var insets: EdgeInsets
     
-    let leftAnchor: NSLayoutXAxisAnchor
-    let rightAnchor: NSLayoutXAxisAnchor
-    let topAnchor: NSLayoutYAxisAnchor
-    let bottomAnchor: NSLayoutYAxisAnchor
+    public let topAttribute: LayoutConstraint.Attribute
+    public let leftAttribute: LayoutConstraint.Attribute
+    public let bottomAttribute: LayoutConstraint.Attribute
+    public let rightAttribute: LayoutConstraint.Attribute
     
     @discardableResult
-    public static func ==(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty) -> [NSLayoutConstraint] {
-        let leftConstraint = lhs.leftAnchor.constraint(equalTo: rhs.leftAnchor,
-                                                       constant: rhs.insets.left - lhs.insets.left)
-        
-        let rightConstraint = lhs.rightAnchor.constraint(equalTo: rhs.rightAnchor,
-                                                         constant: lhs.insets.right - rhs.insets.right)
-        
-        let topConstraint = lhs.topAnchor.constraint(equalTo: rhs.topAnchor,
-                                                     constant: lhs.insets.top - rhs.insets.top)
-        
-        let bottomConstraint = lhs.bottomAnchor.constraint(equalTo: rhs.bottomAnchor,
-                                                           constant: rhs.insets.bottom - lhs.insets.bottom)
-
-        let formedConstraints = [leftConstraint, rightConstraint, topConstraint, bottomConstraint]
-        lhs.context.captureConstraints(formedConstraints)
-        return formedConstraints
+    public static func ==(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty) -> LayoutConstraintGroup {
+        return formConstraints(lhs: lhs, rhs: rhs, relation: .equal)
     }
     
     @discardableResult
-    public static func >=(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty) -> [NSLayoutConstraint] {
-        let leftConstraint = lhs.leftAnchor.constraint(greaterThanOrEqualTo: rhs.leftAnchor,
-                                                       constant: rhs.insets.left - lhs.insets.left)
-        
-        let rightConstraint = lhs.rightAnchor.constraint(greaterThanOrEqualTo: rhs.rightAnchor,
-                                                         constant: lhs.insets.right - rhs.insets.right)
-        
-        let topConstraint = lhs.topAnchor.constraint(greaterThanOrEqualTo: rhs.topAnchor,
-                                                     constant: lhs.insets.top - rhs.insets.top)
-        
-        let bottomConstraint = lhs.bottomAnchor.constraint(greaterThanOrEqualTo: rhs.bottomAnchor,
-                                                           constant: rhs.insets.bottom - lhs.insets.bottom)
-        
-        let formedConstraints = [leftConstraint, rightConstraint, topConstraint, bottomConstraint]
-        lhs.context.captureConstraints(formedConstraints)
-        return formedConstraints
+    public static func >=(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty) -> LayoutConstraintGroup {
+        return formConstraints(lhs: lhs, rhs: rhs, relation: .greaterThanOrEqual)
     }
     
     @discardableResult
-    public static func <=(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty) -> [NSLayoutConstraint] {
-        let leftConstraint = lhs.leftAnchor.constraint(lessThanOrEqualTo: rhs.leftAnchor,
-                                                       constant: rhs.insets.left - lhs.insets.left)
-        
-        let rightConstraint = lhs.rightAnchor.constraint(lessThanOrEqualTo: rhs.rightAnchor,
-                                                         constant: lhs.insets.right - rhs.insets.right)
-        
-        let topConstraint = lhs.topAnchor.constraint(lessThanOrEqualTo: rhs.topAnchor,
-                                                     constant: lhs.insets.top - rhs.insets.top)
-        
-        let bottomConstraint = lhs.bottomAnchor.constraint(lessThanOrEqualTo: rhs.bottomAnchor,
-                                                           constant: rhs.insets.bottom - lhs.insets.bottom)
-        
-        let formedConstraints = [leftConstraint, rightConstraint, topConstraint, bottomConstraint]
-        lhs.context.captureConstraints(formedConstraints)
-        return formedConstraints
+    public static func <=(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty) -> LayoutConstraintGroup {
+        return formConstraints(lhs: lhs, rhs: rhs, relation: .lessThanOrEqual)
     }
     
-    public func inset(left: CGFloat, right: CGFloat, top: CGFloat, bottom: CGFloat) -> LayoutEdgesProperty {
+    public func insetting(left: CGFloat, right: CGFloat, top: CGFloat, bottom: CGFloat) -> LayoutEdgesProperty {
         var property = self
-        let insets = UIEdgeInsets(top: property.insets.top - top, left: property.insets.left - left,
-                                  bottom: property.insets.bottom - bottom, right: property.insets.right - right)
+        property.insets = EdgeInsets(
+            top: property.insets.top - top,
+            left: property.insets.left - left,
+            bottom: property.insets.bottom - bottom,
+            right: property.insets.right - right)
         
-        property.insets = insets
         return property
+    }
+    
+    private static func formConstraints(lhs: LayoutEdgesProperty, rhs: LayoutEdgesProperty, relation: LayoutConstraint.Relation)
+        -> LayoutConstraintGroup
+    {
+        let top = LayoutConstraint(
+            item: lhs.item, attribute: lhs.topAttribute,
+            relatedBy: relation,
+            toItem: rhs.item, attribute: rhs.topAttribute,
+            multiplier: 1.0,
+            constant: rhs.insets.top - lhs.insets.top)
+        let left = LayoutConstraint(
+            item: lhs.item, attribute: lhs.leftAttribute,
+            relatedBy: relation,
+            toItem: rhs.item, attribute: rhs.leftAttribute,
+            multiplier: 1.0,
+            constant: rhs.insets.left - lhs.insets.left)
+        let bottom = LayoutConstraint(
+            item: lhs.item, attribute: lhs.bottomAttribute,
+            relatedBy: relation,
+            toItem: rhs.item, attribute: rhs.bottomAttribute,
+            multiplier: 1.0,
+            constant: rhs.insets.bottom - lhs.insets.bottom)
+        let right = LayoutConstraint(
+            item: lhs.item, attribute: lhs.rightAttribute,
+            relatedBy: relation,
+            toItem: rhs.item, attribute: rhs.rightAttribute,
+            multiplier: 1.0,
+            constant: rhs.insets.right - lhs.insets.right)
+        
+        if let context = LayoutContext.current {
+            context.capture(top)
+            context.capture(left)
+            context.capture(bottom)
+            context.capture(right)
+        }
+        
+        return LayoutConstraintGroup(top: top, leading: left, bottom: bottom, trailing: right)
     }
 }

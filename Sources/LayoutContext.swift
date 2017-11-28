@@ -6,18 +6,34 @@
 //  Copyright © 2017 kAzec. All rights reserved.
 //
 
-import Foundation
-import UIKit
-
 final class LayoutContext {
+    static var current: LayoutContext? = nil
     
-    var constraints = [NSLayoutConstraint]()
+    private var constraints = [LayoutConstraint]()
     
-    func captureConstraint(_ constraint: NSLayoutConstraint) {
+    func capture(_ constraint: LayoutConstraint) {
         constraints.append(constraint)
     }
     
-    func captureConstraints(_ constraints: [NSLayoutConstraint]) {
+    func capture(_ constraints: [LayoutConstraint]) {
         self.constraints.append(contentsOf: constraints)
+    }
+    
+    static func begin() {
+        assert(current == nil, "Previous layout context has not yes ended.")
+        
+        let context = LayoutContext()
+        current = context
+    }
+    
+    static func end(activates: Bool) -> [LayoutConstraint] {
+        let constraints = current!.constraints
+        current = nil
+        
+        if activates {
+            LayoutConstraint.activate(constraints)
+        }
+        
+        return constraints
     }
 }

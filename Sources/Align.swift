@@ -6,49 +6,54 @@
 //  Copyright © 2017 kAzec. All rights reserved.
 //
 
-import Foundation
-import UIKit
-
-private func align<P : LayoutProperty>(_ properties: [P], to target: P) -> [NSLayoutConstraint] {
-    return properties.map { $0 == target }
+@discardableResult
+public func align(_ attribute: LayoutConstraint.Attribute, of first: View, _ rest: View...) -> [LayoutConstraint] {
+    let constraints = rest.reduce(into: [LayoutConstraint]()) { constraints, view in
+        constraints.append(LayoutConstraint(item: first, attribute: attribute,
+                                            relatedBy: .equal,
+                                            toItem: view, attribute: attribute,
+                                            multiplier: 1.0, constant: 0.0))
+    }
+    
+    LayoutContext.current?.capture(constraints)
+    return constraints
 }
 
 @discardableResult
-public func alignLeft(of views: [LayoutProxy<UIView>], to target: LayoutXAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.left }, to: target)
+public func align(_ attribute: LayoutConstraint.Attribute, of first: LayoutProxy<View>, _ rest: LayoutProxy<View>...)
+    -> [LayoutConstraint]
+{
+    let first = first.target
+    
+    let constraints = rest.reduce(into: [LayoutConstraint]()) { constraints, proxy in
+        constraints.append(LayoutConstraint(item: first, attribute: attribute,
+                                            relatedBy: .equal,
+                                            toItem: proxy.target, attribute: attribute,
+                                            multiplier: 1.0, constant: 0.0))
+    }
+    
+    LayoutContext.current?.capture(constraints)
+    return constraints
 }
 
 @discardableResult
-public func alignRight(of views: [LayoutProxy<UIView>], to target: LayoutXAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.right }, to: target)
-}
-
-@discardableResult
-public func alignTop(of views: [LayoutProxy<UIView>], to target: LayoutYAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.top }, to: target)
-}
-
-@discardableResult
-public func alignBottom(of views: [LayoutProxy<UIView>], to target: LayoutYAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.bottom }, to: target)
-}
-
-@discardableResult
-public func alignCenterX(of views: [LayoutProxy<UIView>], to target: LayoutXAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.centerX }, to: target)
-}
-
-@discardableResult
-public func alignCenterY(of views: [LayoutProxy<UIView>], to target: LayoutYAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.centerY }, to: target)
-}
-
-@discardableResult
-public func alignFirstBaseline(of views: [LayoutProxy<UIView>], to target: LayoutYAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.firstBaseline }, to: target)
-}
-
-@discardableResult
-public func alignLastBaseline(of views: [LayoutProxy<UIView>], to target: LayoutYAxisProperty) -> [NSLayoutConstraint] {
-    return align(views.map { $0.lastBaseline }, to: target)
+public func align(_ attribute: LayoutConstraint.Attribute, of views: [LayoutProxy<View>]) -> [LayoutConstraint] {
+    var iterator = views.makeIterator()
+    
+    if let first = iterator.next() {
+        let first = first.target
+        var constraints = [LayoutConstraint]()
+        
+        while let next = iterator.next() {
+            constraints.append(LayoutConstraint(item: first, attribute: attribute,
+                                                relatedBy: .equal,
+                                                toItem: next.target, attribute: attribute,
+                                                multiplier: 1.0, constant: 0.0))
+        }
+        
+        LayoutContext.current?.capture(constraints)
+        return constraints
+    } else {
+        return []
+    }
 }
