@@ -20,14 +20,17 @@ public struct LayoutAxisProperty<Axis : LayoutAxis> : LayoutProperty {
     
     public var constant: CGFloat
     
+    @discardableResult
     public static func ==(lhs: LayoutAxisProperty, rhs: LayoutAxisProperty) -> LayoutConstraint {
         return formConstraint(lhs: lhs, rhs: rhs, relation: .equal)
     }
     
+    @discardableResult
     public static func >=(lhs: LayoutAxisProperty, rhs: LayoutAxisProperty) -> LayoutConstraint {
         return formConstraint(lhs: lhs, rhs: rhs, relation: .greaterThanOrEqual)
     }
     
+    @discardableResult(()
     public static func <=(lhs: LayoutAxisProperty, rhs: LayoutAxisProperty) -> LayoutConstraint {
         return formConstraint(lhs: lhs, rhs: rhs, relation: .lessThanOrEqual)
     }
