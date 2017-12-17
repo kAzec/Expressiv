@@ -30,7 +30,7 @@ public struct LayoutAxisProperty<Axis : LayoutAxis> : LayoutProperty {
         return formConstraint(lhs: lhs, rhs: rhs, relation: .greaterThanOrEqual)
     }
     
-    @discardableResult(()
+    @discardableResult
     public static func <=(lhs: LayoutAxisProperty, rhs: LayoutAxisProperty) -> LayoutConstraint {
         return formConstraint(lhs: lhs, rhs: rhs, relation: .lessThanOrEqual)
     }
