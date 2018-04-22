@@ -6,8 +6,11 @@
 //  Copyright © 2017 kAzec. All rights reserved.
 //
 
+@_versioned
 final class LayoutContext {
-    static var current: LayoutContext? = nil
+    private static var stack = [LayoutContext]()
+    
+    private(set) static var current: LayoutContext?
     
     private var constraints = [LayoutConstraint]()
     
@@ -16,19 +19,22 @@ final class LayoutContext {
     }
     
     func capture(_ constraints: [LayoutConstraint]) {
-        self.constraints.append(contentsOf: constraints)
+        self.constraints += constraints
     }
     
-    static func begin() {
-        assert(current == nil, "Previous layout context has not yes ended.")
-        
+    @_versioned
+    static func push() {
         let context = LayoutContext()
+        stack.append(context)
         current = context
     }
     
-    static func end(activates: Bool) -> [LayoutConstraint] {
-        let constraints = current!.constraints
+    @_versioned
+    static func pop(activates: Bool) -> [LayoutConstraint] {
+        assert(current != nil, "No previous layout context.")
+        
         current = nil
+        let constraints = stack.removeLast().constraints
         
         if activates {
             LayoutConstraint.activate(constraints)
