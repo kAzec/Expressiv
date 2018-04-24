@@ -22,7 +22,7 @@ public func layout<A : LayoutItem>(
     action: (LayoutProxy<A>) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(LayoutProxy(a))
+    action(LayoutProxy(preparing: a))
     return LayoutContext.pop(activates: activates)
 }
 
@@ -34,7 +34,7 @@ public func layout<A : LayoutItem, B : LayoutItem>(
     action: (LayoutProxy<A>, LayoutProxy<B>) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(LayoutProxy(a), LayoutProxy(b))
+    action(LayoutProxy(preparing: a), LayoutProxy(preparing: b))
     return LayoutContext.pop(activates: activates)
 }
 
@@ -46,7 +46,7 @@ public func layout<A : LayoutItem, B : LayoutItem, C : LayoutItem>(
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(LayoutProxy(a), LayoutProxy(b), LayoutProxy(c))
+    action(LayoutProxy(preparing: a), LayoutProxy(preparing: b), LayoutProxy(preparing: c))
     return LayoutContext.pop(activates: activates)
 }
 
@@ -58,7 +58,7 @@ public func layout<A : LayoutItem, B : LayoutItem, C : LayoutItem, D : LayoutIte
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(LayoutProxy(a), LayoutProxy(b), LayoutProxy(c), LayoutProxy(d))
+    action(LayoutProxy(preparing: a), LayoutProxy(preparing: b), LayoutProxy(preparing: c), LayoutProxy(preparing: d))
     return LayoutContext.pop(activates: activates)
 }
 
@@ -70,7 +70,15 @@ public func layout<A : LayoutItem, B : LayoutItem, C : LayoutItem, D : LayoutIte
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(LayoutProxy(a), LayoutProxy(b), LayoutProxy(c), LayoutProxy(d), LayoutProxy(e))
+    
+    action(
+        LayoutProxy(preparing: a),
+        LayoutProxy(preparing: b),
+        LayoutProxy(preparing: c),
+        LayoutProxy(preparing: d),
+        LayoutProxy(preparing: e)
+    )
+    
     return LayoutContext.pop(activates: activates)
 }
 
@@ -84,12 +92,12 @@ public func layout<A : LayoutItem, B : LayoutItem, C : LayoutItem, D : LayoutIte
     LayoutContext.push()
     
     action(
-        LayoutProxy(a),
-        LayoutProxy(b),
-        LayoutProxy(c),
-        LayoutProxy(d),
-        LayoutProxy(e),
-        LayoutProxy(f)
+        LayoutProxy(preparing: a),
+        LayoutProxy(preparing: b),
+        LayoutProxy(preparing: c),
+        LayoutProxy(preparing: d),
+        LayoutProxy(preparing: e),
+        LayoutProxy(preparing: f)
     )
     
     return LayoutContext.pop(activates: activates)
@@ -103,7 +111,7 @@ public func layout<Target : LayoutItem>(
     action: ([LayoutProxy<Target>]) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(targets.map { LayoutProxy($0) })
+    action(targets.map { LayoutProxy(preparing: $0) })
     return LayoutContext.pop(activates: activates)
 }
 
@@ -115,6 +123,6 @@ public func layout<Key, Target : LayoutItem>(
     action: ([Key : LayoutProxy<Target>]) -> ()
 ) -> [LayoutConstraint] {
     LayoutContext.push()
-    action(targets.mapValues { LayoutProxy($0) })
+    action(targets.mapValues { LayoutProxy(preparing: $0) })
     return LayoutContext.pop(activates: activates)
 }
