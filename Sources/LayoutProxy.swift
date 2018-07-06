@@ -169,6 +169,12 @@ public extension LayoutProxy where Item : View {
     var lastBaseline: LayoutYAxisProperty {
         return axis(.lastBaseline)
     }
+    
+    @available(iOS 11.0, tvOS 11.0, *)
+    @_inlineable
+    var safeArea: LayoutProxy<LayoutGuide> {
+        return LayoutProxy<LayoutGuide>(preparing: item.safeAreaLayoutGuide)
+    }
 }
 
 #if os(iOS) || os(tvOS)
@@ -248,11 +254,6 @@ public extension LayoutProxy where Item : View {
 
 @available(iOS 11.0, tvOS 11.0, *)
 public extension LayoutProxy where Item : UIScrollView {
-    @_inlineable
-    var safeArea: LayoutProxy<LayoutGuide> {
-        return LayoutProxy<LayoutGuide>(preparing: item.safeAreaLayoutGuide)
-    }
-    
     @_inlineable
     var content: LayoutProxy<LayoutGuide> {
         return LayoutProxy<LayoutGuide>(preparing: item.contentLayoutGuide)
