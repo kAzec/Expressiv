@@ -18,12 +18,15 @@ public struct LayoutEdgesProperty : LayoutCompoundProperty {
     public var insets = EdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
     
     public let topAttribute: LayoutYAxisAttribute
+    
     public let leftAttribute: LayoutXAxisAttribute
+    
     public let bottomAttribute: LayoutYAxisAttribute
+    
     public let rightAttribute: LayoutXAxisAttribute
     
-    @_versioned
-    init(
+    @_inlineable
+    public init(
         item: LayoutItem,
         top topAttribute: LayoutYAxisAttribute,
         left leftAttribute: LayoutXAxisAttribute,
@@ -140,10 +143,10 @@ public struct LayoutEdgesProperty : LayoutCompoundProperty {
         )
         
         if let context = LayoutContext.current {
-            context.capture(top)
-            context.capture(left)
-            context.capture(bottom)
-            context.capture(right)
+            context.addConstraint(top)
+            context.addConstraint(left)
+            context.addConstraint(bottom)
+            context.addConstraint(right)
         }
         
         return LayoutEdgesConstraints(top: top, left: left, bottom: bottom, right: right)

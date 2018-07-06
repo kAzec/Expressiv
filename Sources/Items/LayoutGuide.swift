@@ -1,5 +1,5 @@
 //
-//  LayoutGuide+LayoutItem.swift
+//  LayoutGuide.swift
 //  Expressiv
 //
 //  Created by Fengwei Liu on 2018/04/22.
@@ -7,9 +7,10 @@
 //
 
 extension LayoutGuide : LayoutItem {
-    @_inlineable
+    @inline(__always)
     public func prepareForLayoutProxy() { }
     
+    @_inlineable
     public func anchor(forXAxis attribute: LayoutXAxisAttribute) -> NSLayoutXAxisAnchor {
         switch attribute {
     #if os(iOS) || os(tvOS)
@@ -38,6 +39,7 @@ extension LayoutGuide : LayoutItem {
         }
     }
     
+    @_inlineable
     public func anchor(forYAxis attribute: LayoutYAxisAttribute) -> NSLayoutYAxisAnchor {
         switch attribute {
     #if os(iOS) || os(tvOS)
@@ -58,6 +60,7 @@ extension LayoutGuide : LayoutItem {
         }
     }
     
+    @_inlineable
     public func anchor(forDimension attribute: LayoutDimensionAttribute) -> NSLayoutDimension {
         switch attribute {
         case .width:

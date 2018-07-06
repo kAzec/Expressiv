@@ -10,12 +10,14 @@ import CoreGraphics
 
 public struct LayoutDimensionProperty : LayoutProperty {
     
-    private enum Backing {
+    @_versioned
+    enum Backing {
         case item(LayoutItem)
         case dimension(NSLayoutDimension)
     }
     
-    private let backing: Backing
+    @_versioned
+    let backing: Backing
     
     public let attribute: LayoutDimensionAttribute
     
@@ -23,29 +25,29 @@ public struct LayoutDimensionProperty : LayoutProperty {
     
     public var constant: CGFloat
     
-    @_versioned
-    init(item: LayoutItem, attribute: LayoutDimensionAttribute, constant: CGFloat) {
-        backing = .item(item)
+    @_inlineable
+    public init(item: LayoutItem, attribute: LayoutDimensionAttribute, constant: CGFloat) {
+        self.backing = .item(item)
         self.attribute = attribute
         self.constant = constant
     }
     
-    @_versioned
-    init(between property: LayoutXAxisProperty, _ otherProperty: LayoutXAxisProperty) {
+    @_inlineable
+    public init(between property: LayoutXAxisProperty, _ otherProperty: LayoutXAxisProperty) {
         let anchor = property.item.anchor(forXAxis: property.attribute)
         let otherAnchor = otherProperty.item.anchor(forXAxis: otherProperty.attribute)
         
-        backing = .dimension(anchor.anchorWithOffset(to: otherAnchor))
+        self.backing = .dimension(anchor.anchorWithOffset(to: otherAnchor))
         self.attribute = .width
         self.constant = property.constant - otherProperty.constant
     }
     
-    @_versioned
-    init(between property: LayoutYAxisProperty, _ otherProperty: LayoutYAxisProperty) {
+    @_inlineable
+    public init(between property: LayoutYAxisProperty, _ otherProperty: LayoutYAxisProperty) {
         let anchor = property.item.anchor(forYAxis: property.attribute)
         let otherAnchor = otherProperty.item.anchor(forYAxis: otherProperty.attribute)
         
-        backing = .dimension(anchor.anchorWithOffset(to: otherAnchor))
+        self.backing = .dimension(anchor.anchorWithOffset(to: otherAnchor))
         self.attribute = .height
         self.constant = property.constant - otherProperty.constant
     }
@@ -157,7 +159,7 @@ public struct LayoutDimensionProperty : LayoutProperty {
             )
         }
         
-        LayoutContext.current?.capture(constraint)
+        LayoutContext.current?.addConstraint(constraint)
         return constraint
     }
     
@@ -181,7 +183,7 @@ public struct LayoutDimensionProperty : LayoutProperty {
             constraint = dimension.constraint(by: relation, to: constant)
         }
         
-        LayoutContext.current?.capture(constraint)
+        LayoutContext.current?.addConstraint(constraint)
         return constraint
     }
 }

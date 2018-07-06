@@ -10,14 +10,15 @@ import CoreGraphics
 
 public struct LayoutAxisProperty<Attribute : LayoutAxisAttribute> : LayoutProperty {
     
+    @_versioned
     let item: LayoutItem
-    
-    public let attribute: Attribute
     
     public var constant: CGFloat
     
-    @_versioned
-    init(item: LayoutItem, attribute: Attribute, constant: CGFloat) {
+    public let attribute: Attribute
+    
+    @_inlineable
+    public init(item: LayoutItem, attribute: Attribute, constant: CGFloat) {
         self.item = item
         self.attribute = attribute
         self.constant = constant
@@ -80,10 +81,12 @@ public struct LayoutAxisProperty<Attribute : LayoutAxisAttribute> : LayoutProper
             constant:   rhs.constant - lhs.constant
         )
         
-        LayoutContext.current?.capture(constraint)
+        LayoutContext.current?.addConstraint(constraint)
         return constraint
     }
 }
+
+// MARK: - Typealiases
 
 public typealias LayoutXAxisProperty = LayoutAxisProperty<LayoutXAxisAttribute>
 public typealias LayoutYAxisProperty = LayoutAxisProperty<LayoutYAxisAttribute>

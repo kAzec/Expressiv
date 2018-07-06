@@ -15,8 +15,11 @@ public struct LayoutDirectionalEdgesProperty : LayoutCompoundProperty {
     let item: LayoutItem
     
     public var topInset: CGFloat = 0.0
+    
     public var leadingInset: CGFloat = 0.0
+    
     public var bottomInset: CGFloat = 0.0
+    
     public var trailingInset: CGFloat = 0.0
     
 #if os(iOS) || os(tvOS)
@@ -41,17 +44,20 @@ public struct LayoutDirectionalEdgesProperty : LayoutCompoundProperty {
 #endif
     
     public let topAttribute: LayoutYAxisAttribute
-    public let leadingAttribute: LayoutDirectionalXAxisAttribute
-    public let bottomAttribute: LayoutYAxisAttribute
-    public let trailingAttribute: LayoutDirectionalXAxisAttribute
     
-    @_versioned
-    init(
+    public let leadingAttribute: LayoutDirectionalAttribute
+    
+    public let bottomAttribute: LayoutYAxisAttribute
+    
+    public let trailingAttribute: LayoutDirectionalAttribute
+    
+    @_inlineable
+    public init(
         item: LayoutItem,
         top topAttribute: LayoutYAxisAttribute,
-        leading leadingAttribute: LayoutDirectionalXAxisAttribute,
+        leading leadingAttribute: LayoutDirectionalAttribute,
         bottom bottomAttribute: LayoutYAxisAttribute,
-        trailing trailingAttribute: LayoutDirectionalXAxisAttribute
+        trailing trailingAttribute: LayoutDirectionalAttribute
     ) {
         self.item = item
         self.topAttribute = topAttribute
@@ -171,10 +177,10 @@ public struct LayoutDirectionalEdgesProperty : LayoutCompoundProperty {
         )
         
         if let context = LayoutContext.current {
-            context.capture(top)
-            context.capture(leading)
-            context.capture(bottom)
-            context.capture(trailing)
+            context.addConstraint(top)
+            context.addConstraint(leading)
+            context.addConstraint(bottom)
+            context.addConstraint(trailing)
         }
         
         return LayoutDirectionalEdgesConstraints(top: top, leading: leading, bottom: bottom, trailing: trailing)

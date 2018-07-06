@@ -10,7 +10,7 @@
 @discardableResult
 public func align(
     _ attribute: LayoutConstraint.Attribute,
-    for first: LayoutItem,
+    of first: LayoutItem,
     _ rest: LayoutItem...
 ) -> [LayoutConstraint] {
     return makeAlignment(attribute: attribute, first: first, rest: rest)
@@ -20,7 +20,7 @@ public func align(
 @discardableResult
 public func align(
     _ attribute: LayoutConstraint.Attribute,
-    for items: [LayoutItem]
+    of items: [LayoutItem]
 ) -> [LayoutConstraint] {
     if let first = items.first {
         return makeAlignment(attribute: attribute, first: first, rest: items.dropFirst())
@@ -33,8 +33,8 @@ public func align(
 @discardableResult
 public func align(
     _ attribute: LayoutConstraint.Attribute,
-    for first: AnyLayoutProxy,
-    _ rest: AnyLayoutProxy...
+    of first: LayoutProxyProtocol,
+    _ rest: LayoutProxyProtocol...
 ) -> [LayoutConstraint] {
     return makeAlignment(attribute: attribute, first: first, rest: rest)
 }
@@ -43,7 +43,7 @@ public func align(
 @discardableResult
 public func align(
     _ attribute: LayoutConstraint.Attribute,
-    for proxies: [AnyLayoutProxy]
+    of proxies: [LayoutProxyProtocol]
 ) -> [LayoutConstraint] {
     if let first = proxies.first {
         return makeAlignment(attribute: attribute, first: first, rest: proxies.dropFirst())
@@ -74,16 +74,16 @@ func makeAlignment<LayoutItems : Collection>(
         )
     }
     
-    LayoutContext.current?.capture(constraints)
+    LayoutContext.current?.addConstraints(constraints)
     return constraints
 }
 
 @_versioned
 func makeAlignment<LayoutProxies : Collection>(
     attribute: LayoutConstraint.Attribute,
-    first: AnyLayoutProxy,
+    first: LayoutProxyProtocol,
     rest: LayoutProxies
-) -> [LayoutConstraint] where LayoutProxies.Element == AnyLayoutProxy {
+) -> [LayoutConstraint] where LayoutProxies.Element == LayoutProxyProtocol {
     let first = first.base
     
     let constraints: [LayoutConstraint] = rest.map { proxy in
@@ -98,6 +98,6 @@ func makeAlignment<LayoutProxies : Collection>(
         )
     }
     
-    LayoutContext.current?.capture(constraints)
+    LayoutContext.current?.addConstraints(constraints)
     return constraints
 }

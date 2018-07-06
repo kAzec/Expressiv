@@ -8,36 +8,50 @@
 
 @_versioned
 final class LayoutContext {
-    private static var stack = [LayoutContext]()
-    
-    private(set) static var current: LayoutContext?
-    
+    private let previous: LayoutContext?
     private var constraints = [LayoutConstraint]()
     
-    func capture(_ constraint: LayoutConstraint) {
-        constraints.append(constraint)
+    @inline(__always)
+    private init(previous: LayoutContext?) {
+        self.previous = previous
     }
     
-    func capture(_ constraints: [LayoutConstraint]) {
-        self.constraints += constraints
+    @inline(__always)
+    func addConstraint(_ newConstraint: LayoutConstraint) {
+        constraints.append(newConstraint)
     }
+    
+    @inline(__always)
+    func addConstraints(_ newConstraints: [LayoutConstraint]) {
+        constraints.append(contentsOf: newConstraints)
+    }
+}
+
+// MARK: - Pushing/Poping Contexts
+
+extension LayoutContext {
+    private(set) static var current: LayoutContext?
     
     @_versioned
-    static func push() {
-        let context = LayoutContext()
-        stack.append(context)
+    static func push() -> LayoutContext {
+        let context = LayoutContext(previous: current)
         current = context
+        return context
     }
     
     @_versioned
-    static func pop(activates: Bool) -> [LayoutConstraint] {
-        assert(current != nil, "No previous layout context.")
+    func pop(identifier: String?, exclusive: Bool) -> [LayoutConstraint] {
+        if let identifier = identifier {
+            var counter = 0
+            
+            for constraint in constraints where constraint.identifier == nil {
+                constraint.identifier = "\(identifier):\(counter)"
+                counter += 1
+            }
+        }
         
-        current = nil
-        let constraints = stack.removeLast().constraints
-        
-        if activates {
-            LayoutConstraint.activate(constraints)
+        if !exclusive, let previous = previous {
+            previous.addConstraints(constraints)
         }
         
         return constraints

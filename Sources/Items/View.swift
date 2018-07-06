@@ -1,5 +1,5 @@
 //
-//  View+LayoutItem.swift
+//  View.swift
 //  Expressiv
 //
 //  Created by Fengwei Liu on 2018/04/22.
@@ -12,6 +12,7 @@ extension View : LayoutItem {
         translatesAutoresizingMaskIntoConstraints = false
     }
     
+    @_inlineable
     public func anchor(forXAxis attribute: LayoutXAxisAttribute) -> NSLayoutXAxisAnchor {
         switch attribute {
         case .left:
@@ -39,6 +40,7 @@ extension View : LayoutItem {
         }
     }
     
+    @_inlineable
     public func anchor(forYAxis attribute: LayoutYAxisAttribute) -> NSLayoutYAxisAnchor {
         switch attribute {
         case .top:
@@ -62,6 +64,7 @@ extension View : LayoutItem {
         }
     }
     
+    @_inlineable
     public func anchor(forDimension attribute: LayoutDimensionAttribute) -> NSLayoutDimension {
         switch attribute {
         case .width:
@@ -71,4 +74,3 @@ extension View : LayoutItem {
         }
     }
 }
-

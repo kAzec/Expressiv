@@ -6,8 +6,15 @@
 //  Copyright © 2018 kAzec. All rights reserved.
 //
 
-public protocol LayoutAttribute : RawRepresentable where RawValue == Int {
-    var nsAttribute: LayoutConstraint.Attribute { get }
+public protocol LayoutAttribute : RawRepresentable where RawValue == Int { }
+
+public extension LayoutAttribute {
+    var nsAttribute: LayoutConstraint.Attribute {
+        @inline(__always)
+        get {
+            return unsafeBitCast(rawValue, to: LayoutConstraint.Attribute.self)
+        }
+    }
 }
 
 public protocol LayoutAxisAttribute : LayoutAttribute { }
@@ -35,11 +42,6 @@ public enum LayoutXAxisAttribute : Int, LayoutAxisAttribute {
     
     case centerXWithinMargins = 19
     #endif
-    
-    @_inlineable
-    public var nsAttribute: LayoutConstraint.Attribute {
-        return unsafeBitCast(rawValue, to: LayoutConstraint.Attribute.self)
-    }
 }
 
 public enum LayoutYAxisAttribute : Int, LayoutAxisAttribute {
@@ -61,14 +63,9 @@ public enum LayoutYAxisAttribute : Int, LayoutAxisAttribute {
     
     case centerYWithinMargins = 20
     #endif
-    
-    @_inlineable
-    public var nsAttribute: LayoutConstraint.Attribute {
-        return unsafeBitCast(rawValue, to: LayoutConstraint.Attribute.self)
-    }
 }
 
-public enum LayoutDirectionalXAxisAttribute : Int {
+public enum LayoutDirectionalAttribute : Int, LayoutAttribute {
     
     case leading = 5
     
@@ -81,24 +78,14 @@ public enum LayoutDirectionalXAxisAttribute : Int {
     #endif
     
     @_inlineable
-    public var nsAttribute: LayoutConstraint.Attribute {
-        return unsafeBitCast(rawValue, to: LayoutConstraint.Attribute.self)
-    }
-    
-    @_inlineable
     public var xAttribute: LayoutXAxisAttribute {
         return unsafeBitCast(self, to: LayoutXAxisAttribute.self)
     }
 }
 
-public enum LayoutDimensionAttribute : Int {
+public enum LayoutDimensionAttribute : Int, LayoutAttribute {
     
     case width = 7
     
     case height = 8
-    
-    @_inlineable
-    public var nsAttribute: LayoutConstraint.Attribute {
-        return unsafeBitCast(rawValue, to: LayoutConstraint.Attribute.self)
-    }
 }

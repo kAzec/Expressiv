@@ -15,6 +15,7 @@ public struct LayoutPointProperty : LayoutCompoundProperty {
     let item: LayoutItem
     
     public let xAttribute: LayoutXAxisAttribute
+    
     public let yAttribute: LayoutYAxisAttribute
     
     /// The offset value for the x-axis.
@@ -22,8 +23,8 @@ public struct LayoutPointProperty : LayoutCompoundProperty {
     /// The offset value for the y-axis.
     public var dy: CGFloat = 0.0
     
-    @_versioned
-    init(item: LayoutItem, x xAttribute: LayoutXAxisAttribute, y yAttribute: LayoutYAxisAttribute) {
+    @_inlineable
+    public init(item: LayoutItem, x xAttribute: LayoutXAxisAttribute, y yAttribute: LayoutYAxisAttribute) {
         self.item = item
         self.xAttribute = xAttribute
         self.yAttribute = yAttribute
@@ -102,8 +103,8 @@ public struct LayoutPointProperty : LayoutCompoundProperty {
         )
         
         if let context = LayoutContext.current {
-            context.capture(x)
-            context.capture(y)
+            context.addConstraint(x)
+            context.addConstraint(y)
         }
         
         return LayoutPointConstraints(x: x, y: y)

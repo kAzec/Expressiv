@@ -15,9 +15,9 @@
     public typealias LayoutConstraint = NSLayoutConstraint
     
     public extension LayoutConstraint {
-        typealias Attribute = NSLayoutAttribute
         typealias Priority = UILayoutPriority
         typealias Relation = NSLayoutRelation
+        typealias Attribute = NSLayoutAttribute
     }
 #else
     import AppKit

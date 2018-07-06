@@ -9,10 +9,16 @@
 import CoreGraphics
 
 public enum DistributionMode {
-    case leadingToTrailing, topToBottom, leftToRight
+    
+    case leadingToTrailing
+    
+    case topToBottom
+    
+    case leftToRight
+    
+    static let vertically: DistributionMode = .topToBottom
     
     static let horizontally: DistributionMode = .leadingToTrailing
-    static let vertically: DistributionMode = .topToBottom
 }
 
 @_inlineable
@@ -39,8 +45,8 @@ public func distribute(_ items: [LayoutItem], mode: DistributionMode, spacing: C
 @_inlineable
 @discardableResult
 public func distribute(
-    _ first: AnyLayoutProxy,
-    _ rest: AnyLayoutProxy...,
+    _ first: LayoutProxyProtocol,
+    _ rest: LayoutProxyProtocol...,
     mode: DistributionMode,
     spacing: CGFloat = 0.0
 ) -> [LayoutConstraint] {
@@ -50,7 +56,7 @@ public func distribute(
 @_inlineable
 @discardableResult
 public func distribute(
-    _ proxies: [AnyLayoutProxy],
+    _ proxies: [LayoutProxyProtocol],
     mode: DistributionMode,
     spacing: CGFloat = 0.0
 ) -> [LayoutConstraint] {
@@ -79,17 +85,17 @@ func makeDistribution<Items : Collection>(
         return connector(previous, next, spacing)
     }
     
-    LayoutContext.current?.capture(constraints)
+    LayoutContext.current?.addConstraints(constraints)
     return constraints
 }
 
 @_versioned
 func makeDistribution<Proxies : Collection>(
-    first: AnyLayoutProxy,
+    first: LayoutProxyProtocol,
     rest: Proxies,
     mode: DistributionMode,
     spacing: CGFloat
-) -> [LayoutConstraint] where Proxies.Element == AnyLayoutProxy {
+) -> [LayoutConstraint] where Proxies.Element == LayoutProxyProtocol {
     let connector = mode.connector
     var previous = first.base
     
@@ -100,7 +106,7 @@ func makeDistribution<Proxies : Collection>(
         return connector(previous, next, spacing)
     }
     
-    LayoutContext.current?.capture(constraints)
+    LayoutContext.current?.addConstraints(constraints)
     return constraints
 }
 

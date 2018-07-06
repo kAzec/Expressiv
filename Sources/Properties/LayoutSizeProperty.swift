@@ -21,8 +21,8 @@ public struct LayoutSizeProperty : LayoutCompoundProperty {
     /// The multiplier value for both the width and the height of the item.
     public var multiplier: CGFloat = 1.0
     
-    @_versioned
-    init(item: LayoutItem) {
+    @_inlineable
+    public init(item: LayoutItem) {
         self.item = item
     }
     
@@ -131,8 +131,8 @@ public struct LayoutSizeProperty : LayoutCompoundProperty {
         )
         
         if let context = LayoutContext.current {
-            context.capture(width)
-            context.capture(height)
+            context.addConstraint(width)
+            context.addConstraint(height)
         }
         
         return LayoutSizeConstraints(width: width, height: height)
@@ -161,8 +161,8 @@ public struct LayoutSizeProperty : LayoutCompoundProperty {
         )
         
         if let context = LayoutContext.current {
-            context.capture(width)
-            context.capture(height)
+            context.addConstraint(width)
+            context.addConstraint(height)
         }
         
         return LayoutSizeConstraints(width: width, height: height)
