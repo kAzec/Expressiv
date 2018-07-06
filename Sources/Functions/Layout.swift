@@ -8,7 +8,7 @@
 
 @_inlineable
 public func layout(
-    _ identifier: String? = nil,
+    identifier: String? = nil,
     exclusive: Bool = false,
     action: () -> Void
 ) -> [LayoutConstraint] {
@@ -19,7 +19,7 @@ public func layout(
 
 @_inlineable
 public func layout<A>(
-    _ identifier: String? = nil,
+    identifier: String? = nil,
     _ a: A,
     exclusive: Bool = false,
     action: (LayoutProxy<A>) -> ()
@@ -31,7 +31,7 @@ public func layout<A>(
 
 @_inlineable
 public func layout<A, B>(
-    _ identifier: String? = nil,
+    identifier: String? = nil,
     _ a: A, _ b: B,
     exclusive: Bool = false,
     action: (LayoutProxy<A>, LayoutProxy<B>) -> ()
@@ -43,7 +43,7 @@ public func layout<A, B>(
 
 @_inlineable
 public func layout<A, B, C>(
-    _ identifier: String? = nil,
+    identifier: String? = nil,
     _ a: A, _ b: B, _ c: C,
     exclusive: Bool = false,
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> ()
@@ -55,7 +55,7 @@ public func layout<A, B, C>(
 
 @_inlineable
 public func layout<A, B, C, D>(
-    _ identifier: String? = nil,
+    identifier: String? = nil,
     _ a: A, _ b: B, _ c: C, _ d: D,
     exclusive: Bool = false,
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> ()
@@ -67,8 +67,8 @@ public func layout<A, B, C, D>(
 
 @_inlineable
 public func layout<A, B, C, D, E>(
-    _ identifier: String? = nil,
     _ a: A, _ b: B, _ c: C, _ d: D, _ e: E,
+    identifier: String? = nil,
     exclusive: Bool = false,
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>) -> ()
 ) -> [LayoutConstraint] {
@@ -87,8 +87,8 @@ public func layout<A, B, C, D, E>(
 
 @_inlineable
 public func layout<A, B, C, D, E, F>(
-    _ identifier: String? = nil,
     _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F,
+    identifier: String? = nil,
     exclusive: Bool = false,
     action: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>, LayoutProxy<F>) -> ()
 ) -> [LayoutConstraint] {
@@ -108,8 +108,8 @@ public func layout<A, B, C, D, E, F>(
 
 @_inlineable
 public func layout<Target>(
-    _ identifier: String? = nil,
     _ targets: [Target],
+    identifier: String? = nil,
     exclusive: Bool = false,
     action: ([LayoutProxy<Target>]) -> ()
 ) -> [LayoutConstraint] {
@@ -120,8 +120,8 @@ public func layout<Target>(
 
 @_inlineable
 public func layout<Key, Target>(
-    _ identifier: String? = nil,
     _ targets: [Key : Target],
+    identifier: String? = nil,
     exclusive: Bool = false,
     action: ([Key : LayoutProxy<Target>]) -> ()
 ) -> [LayoutConstraint] {
